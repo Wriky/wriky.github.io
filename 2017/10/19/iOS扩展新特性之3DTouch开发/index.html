@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>iOS扩展新特性之3DTouch开发 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="forsigner,前端,设计,Hexo主题,前端开发,用户体验,设计,frontend,design,nodejs,JavaScript" />
+  
+
+  <meta name="description" content="3D Touch是在iPhone6s之后且系统是iOS9以上才能使用的功能 总的来说分如下两种（1）A user can now press your Home screen icon to immediately access functionality provided by your app.（2）Within your app, a user can now press views to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS扩展新特性之3DTouch开发">
+<meta property="og:url" content="http://riceRound.github.io/2017/10/19/iOS扩展新特性之3DTouch开发/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="3D Touch是在iPhone6s之后且系统是iOS9以上才能使用的功能 总的来说分如下两种（1）A user can now press your Home screen icon to immediately access functionality provided by your app.（2）Within your app, a user can now press views to">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1839277-c44841ad395d13ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-10-19T14:10:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS扩展新特性之3DTouch开发">
+<meta name="twitter:description" content="3D Touch是在iPhone6s之后且系统是iOS9以上才能使用的功能 总的来说分如下两种（1）A user can now press your Home screen icon to immediately access functionality provided by your app.（2）Within your app, a user can now press views to">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1839277-c44841ad395d13ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">Home</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">Home</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-Home-Screen-Quick-Actions（按压应用图标）"><span class="toc-text">一. Home Screen Quick Actions（按压应用图标）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-Peek-and-Pop（弹出一个视图和push到一个新的页面）"><span class="toc-text">二. Peek and Pop（弹出一个视图和push到一个新的页面）</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-iOS扩展新特性之3DTouch开发" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">iOS扩展新特性之3DTouch开发</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.10.19</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>John Doe</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://www.forsigner.com/2017/10/19/iOS扩展新特性之3DTouch开发/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>3D Touch是在iPhone6s之后且系统是iOS9以上才能使用的功能</p>
+<p>总的来说分如下两种<br>（1）A user can now press your Home screen icon to immediately access functionality provided by your app.<br>（2）Within your app, a user can now press views to see previews of additional content and gain accelerated access to features.<br>一种是按压应用icon弹出的快捷菜单，另一种是在应用里面，按压view弹出另一个视图，再深按一次可push到另一个页面。</p>
+<h3 id="一-Home-Screen-Quick-Actions（按压应用图标）"><a href="#一-Home-Screen-Quick-Actions（按压应用图标）" class="headerlink" title="一. Home Screen Quick Actions（按压应用图标）"></a>一. Home Screen Quick Actions（按压应用图标）</h3><p>在info.plist文件里添加一项UIApplicationShortcutItems，这是个数组，里面添加任意项，Item0里面的三项分别是图片名称、文本内容、类型，在AppDelegate里是根据这个类型跳转到指定页的。<br><img src="http://upload-images.jianshu.io/upload_images/1839277-c44841ad395d13ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2017-01-19 17.49.33.png"></p>
+<p>在AppDelegate如下方法里实现跳转</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application openURL:(<span class="built_in">NSURL</span> *)url sourceApplication:(<span class="built_in">NSString</span> *)sourceApplication annotation:(<span class="keyword">id</span>)annotation</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (articleType == kTypeAttetion) &#123;</div><div class="line">    [<span class="keyword">self</span>.tabbar setTabBarSelectedWithIndex:kTabbarTypeAttention];</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    [<span class="keyword">self</span>.tabbar setTabBarSelectedWithIndex:kTabbarTypeHome];</div><div class="line">&#125;</div><div class="line">HBBaseNavController *nc = (HBBaseNavController *)<span class="keyword">self</span>.tabbar.selectedViewController;</div><div class="line">[nc popToRootViewControllerAnimated:<span class="literal">YES</span>];</div><div class="line"></div><div class="line"><span class="built_in">UIViewController</span> *vc = [[<span class="built_in">UIViewController</span> alloc] init];</div><div class="line">  [nc pushViewController:vc animated:<span class="literal">YES</span>];</div></pre></td></tr></table></figure>
+<p>跳转的时候要注意的是，先让TabBarViewController跳转到指定Tab，再让这个Tab下的NavigationController 回到根视图（popToRootViewController），然后再push到对应的ViewController里去。</p>
+<h3 id="二-Peek-and-Pop（弹出一个视图和push到一个新的页面）"><a href="#二-Peek-and-Pop（弹出一个视图和push到一个新的页面）" class="headerlink" title="二. Peek and Pop（弹出一个视图和push到一个新的页面）"></a>二. Peek and Pop（弹出一个视图和push到一个新的页面）</h3><ol>
+<li>注册事件</li>
+</ol>
+<p>如果是在一个tableview上实现这个功能，则需要在cellForRow里面去注册这个事件，</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (IOS9_OR_LATER) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.traitCollection.forceTouchCapability == <span class="built_in">UIForceTouchCapabilityAvailable</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (!cell.hasRegister3DTouch) &#123;</div><div class="line">            [[<span class="keyword">self</span> viewController] registerForPreviewingWithDelegate:HBTouchDelegate sourceView:cell];</div><div class="line">            cell.hasRegister3DTouch = <span class="literal">YES</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里面有两点重要的处理：</p>
+<ul>
+<li>第一点是关于这个cell是否被注册过，由于tableview的cell是复用的，所以只注册一遍即可，否则在列表上拉加载几屏后会出现严重的卡顿。</li>
+<li>第二点是这个View所属ViewController的代理指向问题，如果有多个列表，每个列表里都要注册这个代理，这样每个列表里都要实现这个代理的方法，同样的方法要写很多遍，这明显不符合我们编程简洁、高效的宗旨，所以可以把代理的实现抽象成一个类，然后注册时将代理指向这个类（在上面代码中指的是HBTouchDelegate，实现的就是UIViewControllerPreviewingDelegate的两个代理方法）。</li>
+</ul>
+<ol>
+<li>实现代理方法</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#pragma mark - UIViewControllerPreviewingDelegate</span></div><div class="line">- (<span class="keyword">nullable</span> <span class="built_in">UIViewController</span> *)previewingContext:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location &#123;</div><div class="line"></div><div class="line"><span class="built_in">UIView</span> *sourceCell = [previewingContext sourceView];</div><div class="line"><span class="keyword">if</span> (![[sourceCell viewController].presentedViewController isKindOfClass:[HBPeekViewController <span class="keyword">class</span>]]) &#123;</div><div class="line">    HBPeekViewController *peekViewController = [HBPeekViewController new];</div><div class="line"> peekViewController.preferredContentSize = <span class="built_in">CGSizeMake</span>(<span class="number">0</span>, <span class="number">300</span>);<span class="comment">//这个是弹出视图的宽高，默认是屏幕宽高</span></div><div class="line">    <span class="keyword">return</span> peekViewController;</div><div class="line"> &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)previewingContext:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext commitViewController:(<span class="built_in">UIViewController</span> *)viewControllerToCommit <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">9</span>_0) &#123;</div><div class="line">[[[previewingContext sourceView] viewController] jumpWithArticleEntity:(HBArticleEntity *)<span class="keyword">self</span>.touchEntity];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>peekViewController中给弹出的视图添加一些快捷操作，点赞、收藏、对上面的文字进行复制等等，只要在previewActionItems方法，创建UIPreviewAction到数组中，可以在UIPreviewAction的block里实现对应的操作即可</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSArray</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">UIPreviewActionItem</span>&gt;&gt;*)previewActionItems &#123;</div><div class="line"><span class="comment">// 生成UIPreviewAction</span></div><div class="line"> <span class="built_in">UIPreviewAction</span> *action1 = [<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"赞"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</div><div class="line">         <span class="comment">//do something</span></div><div class="line"> &#125;];</div><div class="line"></div><div class="line"><span class="built_in">UIPreviewAction</span> *action2 = [<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"看全文"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</div><div class="line">   <span class="comment">//do something</span></div><div class="line">&#125;];</div><div class="line"></div><div class="line"><span class="built_in">UIPreviewAction</span> *action3 = [<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"收藏"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</div><div class="line">   <span class="comment">//do something</span></div><div class="line"> &#125;];</div><div class="line"> <span class="built_in">NSArray</span> *group = <span class="literal">nil</span>;</div><div class="line"> group = @[action1, action2, action3];</div><div class="line"> <span class="keyword">return</span> group;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>到这里3DTouch主要的几点就讲完啦！</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://developer.apple.com/library/prerelease/content/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/index.html#//apple_ref/doc/uid/TP40016543" target="_blank" rel="external">https://developer.apple.com/library/prerelease/content/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/index.html#//apple_ref/doc/uid/TP40016543</a></li>
+</ul>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持RiceRound</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/10/19/hello-world/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'forsigner';
+    
+    var disqus_url = 'http://riceRound.github.io/2017/10/19/iOS扩展新特性之3DTouch开发/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//forsigner.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
